@@ -29,6 +29,8 @@ class calories : Fragment() {
 
         // Initialize data
         calorieItemList = mutableListOf(
+            CaloriesItem("Spaguettis", "300 Cal", "26-05-2024"),
+            CaloriesItem("Helado", "100 Cal", "26-05-2024"),
             CaloriesItem("Ensalada", "200 Cal", "25-05-2024"),
             CaloriesItem("Pizza", "400 Cal", "24-05-2024"),
             CaloriesItem("Sushi", "300 Cal", "20-05-2024"),
@@ -37,14 +39,16 @@ class calories : Fragment() {
         )
 
         // Filter the list
-        val filteredList = filterRecentItems(calorieItemList, 7)
+        val filteredList =
+            filterRecentItems(calorieItemList, 0) // days = cantidad de dias previos a mostrarse
 
         adapter = CaloriesAdapter(filteredList)
         binding.recyclerViewCalories.layoutManager = LinearLayoutManager(context)
         binding.recyclerViewCalories.adapter = adapter
 
         // Calculate and display total calories for today
-        binding.tvTotalCalories.text = "Total de calorías hoy: ${calculateCaloriesForToday(filteredList)}"
+        binding.tvTotalCalories.text =
+            "Total de calorías hoy: ${calculateCaloriesForToday(filteredList)}"
 
         return binding.root
     }
@@ -54,7 +58,7 @@ class calories : Fragment() {
         val currentDate = Date()
         val thresholdDate = Calendar.getInstance().apply {
             time = currentDate
-            add(Calendar.DAY_OF_YEAR, -days)
+            add(Calendar.DAY_OF_YEAR, -(days + 1))
         }.time
 
         return items.filter {
@@ -62,11 +66,17 @@ class calories : Fragment() {
             itemDate != null && !itemDate.before(thresholdDate)
         }
     }
+
     private fun calculateCaloriesForToday(items: List<CaloriesItem>): Int {
         val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
         val currentDate = sdf.format(Date())
-        return items.filter { it.fecha == currentDate }
-            .sumBy { it.calorias.toIntOrNull() ?: 0 }
-    }
+        val regex =
+            Regex("[^0-9]+") // Expresión regular para eliminar caracteres que no sean números
 
+        return items.filter { it.fecha == currentDate }
+            .sumBy {
+                val calories = it.calorias.replace(regex, "") // Eliminar caracteres no numéricos
+                calories.toIntOrNull() ?: 0
+            }
+    }
 }

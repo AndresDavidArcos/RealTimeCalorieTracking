@@ -43,6 +43,9 @@ class calories : Fragment() {
         binding.recyclerViewCalories.layoutManager = LinearLayoutManager(context)
         binding.recyclerViewCalories.adapter = adapter
 
+        // Calculate and display total calories for today
+        binding.tvTotalCalories.text = "Total de calorías hoy: ${calculateCaloriesForToday(filteredList)}"
+
         return binding.root
     }
 
@@ -59,4 +62,11 @@ class calories : Fragment() {
             itemDate != null && !itemDate.before(thresholdDate)
         }
     }
+    private fun calculateCaloriesForToday(items: List<CaloriesItem>): Int {
+        val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        val currentDate = sdf.format(Date())
+        return items.filter { it.fecha == currentDate }
+            .sumBy { it.calorias.toIntOrNull() ?: 0 }
+    }
+
 }

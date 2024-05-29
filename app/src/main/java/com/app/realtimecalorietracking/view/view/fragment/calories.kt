@@ -5,12 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.app.realtimecalorietracking.R
 import com.app.realtimecalorietracking.databinding.FragmentCaloriesBinding
-import com.app.realtimecalorietracking.databinding.FragmentHomeBinding
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.realtimecalorietracking.view.adapter.CaloriesItem
-import com.example.realtimecalorietracking.view.adapter.CaloriesAdapter
+import com.app.realtimecalorietracking.adapter.CaloriesItem
+import com.app.realtimecalorietracking.adapter.CaloriesAdapter
 import java.text.SimpleDateFormat
 import java.util.*
 

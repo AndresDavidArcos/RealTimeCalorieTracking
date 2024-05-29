@@ -1,9 +1,9 @@
-package com.example.realtimecalorietracking.view.adapter
+package com.app.realtimecalorietracking.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.realtimecalorietracking.databinding.CardviewCaloriesBinding
+import com.app.realtimecalorietracking.databinding.CardviewCaloriesBinding
 
 data class CaloriesItem(val nombrePlato: String, val calorias: String, val fecha: String)
 

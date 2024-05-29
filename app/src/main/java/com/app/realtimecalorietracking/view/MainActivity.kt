@@ -1,12 +1,12 @@
-package com.example.realtimecalorietracking.view
+package com.app.realtimecalorietracking.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
-import com.example.realtimecalorietracking.R
-import com.example.realtimecalorietracking.databinding.ActivityMainBinding
+import com.app.realtimecalorietracking.R
+import com.app.realtimecalorietracking.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

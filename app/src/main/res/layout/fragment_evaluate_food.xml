@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragment.evaluateFood">
+    tools:context=".view.view.fragment.evaluateFood">
 
     <ImageView
         android:id="@+id/imageView"

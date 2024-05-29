@@ -1,4 +1,4 @@
-package com.example.realtimecalorietracking
+package com.app.realtimecalorietracking
 
 import org.junit.Test
 

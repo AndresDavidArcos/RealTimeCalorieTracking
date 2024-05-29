@@ -1,4 +1,4 @@
-package com.example.realtimecalorietracking.view.fragment
+package com.app.realtimecalorietracking.view.fragment
 
 import android.net.Uri
 import android.Manifest
@@ -15,12 +15,12 @@ import android.view.LayoutInflater
 import android.provider.MediaStore
 import android.content.ContentValues
 import androidx.fragment.app.Fragment
-import com.example.realtimecalorietracking.R
+import com.app.realtimecalorietracking.R
 import androidx.activity.result.ActivityResult
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import com.example.realtimecalorietracking.databinding.FragmentEvaluateFoodBinding
+import com.app.realtimecalorietracking.databinding.FragmentEvaluateFoodBinding
 
 class evaluateFood : Fragment() {
 

@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.realtimecalorietracking"
+    namespace = "com.app.realtimecalorietracking"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.realtimecalorietracking"
+        applicationId = "com.app.realtimecalorietracking"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

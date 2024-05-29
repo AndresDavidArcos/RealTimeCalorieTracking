@@ -1,11 +1,12 @@
 package com.app.realtimecalorietracking.model
 
-import java.util.Date
 import java.io.Serializable
+import java.util.Date
 
-data class Goals(
-    val goal_id: Int,
+data class Food(
+    val food_id: Int,
     val user_id: Int,
     val date: Date,
+    val name: String,
     val calories: Int
-):Serializable
+): Serializable

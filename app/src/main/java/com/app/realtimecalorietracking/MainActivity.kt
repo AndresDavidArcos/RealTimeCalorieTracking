@@ -1,4 +1,4 @@
-package com.app.realtimecalorietracking.view
+package com.app.realtimecalorietracking
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

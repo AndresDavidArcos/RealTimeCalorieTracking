@@ -1,4 +1,4 @@
-package com.app.realtimecalorietracking.view.view.fragment
+package com.app.realtimecalorietracking.view.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

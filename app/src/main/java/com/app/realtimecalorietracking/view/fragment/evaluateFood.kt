@@ -29,6 +29,7 @@ class evaluateFood : Fragment() {
     }
 
     private lateinit var mCaptureBtn: Button
+    private lateinit var mCalculateCaloriesBtn: Button
     private lateinit var mImageView: ImageView
 
     private var image_uri: Uri? = null
@@ -43,6 +44,7 @@ class evaluateFood : Fragment() {
         val view = inflater.inflate(R.layout.fragment_evaluate_food, container, false)
         mImageView = view.findViewById(R.id.imageView)
         mCaptureBtn = view.findViewById(R.id.captureButton)
+        mCalculateCaloriesBtn = view.findViewById(R.id.calculateCaloriesButton)
 
         //button click
         mCaptureBtn.setOnClickListener(View.OnClickListener {
@@ -58,6 +60,15 @@ class evaluateFood : Fragment() {
                 requestCameraPermissions.launch(cameraPermissions)
             }
         })
+
+        // Button click to calculate calories
+        mCalculateCaloriesBtn.setOnClickListener(View.OnClickListener {
+            // Add functionality to calculate calories
+            mCaptureBtn.setEnabled(false)
+            mCalculateCaloriesBtn.setEnabled(false)
+            Toast.makeText(requireContext(), "Calculating calories...", Toast.LENGTH_SHORT).show()
+        })
+
 
         return view
     }
@@ -109,6 +120,8 @@ class evaluateFood : Fragment() {
             Log.d(TAG, "onActivityResult: imageUri: $image_uri")
             // Display the image
             mImageView.setImageURI(image_uri)
+            // Show the calculate calories button
+            mCalculateCaloriesBtn.visibility = View.VISIBLE
         } else {
             //Cancelled
             Toast.makeText(requireContext(), "Cancelled...!", Toast.LENGTH_SHORT).show()

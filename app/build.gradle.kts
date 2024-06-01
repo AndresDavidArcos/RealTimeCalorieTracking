@@ -77,4 +77,6 @@ dependencies {
     implementation ("androidx.activity:activity-ktx:1.8.0")
     implementation ("androidx.fragment:fragment-ktx:1.6.2")
 
+    //calculate calories
+    implementation ("com.microsoft.azure.android:azure-storage-android:2.0.0")
 }

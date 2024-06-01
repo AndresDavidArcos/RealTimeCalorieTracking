@@ -22,6 +22,19 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import com.app.realtimecalorietracking.databinding.FragmentEvaluateFoodBinding
 
+import com.microsoft.azure.storage.CloudStorageAccount
+import com.microsoft.azure.storage.blob.CloudBlobClient
+import com.microsoft.azure.storage.blob.CloudBlobContainer
+import com.microsoft.azure.storage.blob.CloudBlockBlob
+import kotlinx.coroutines.DelicateCoroutinesApi
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 class evaluateFood : Fragment() {
 
     companion object {
@@ -67,6 +80,8 @@ class evaluateFood : Fragment() {
             mCaptureBtn.setEnabled(false)
             mCalculateCaloriesBtn.setEnabled(false)
             Toast.makeText(requireContext(), "Calculating calories...", Toast.LENGTH_SHORT).show()
+            uploadImage()
+//            calculateCalories()
         })
 
 
@@ -125,6 +140,56 @@ class evaluateFood : Fragment() {
         } else {
             //Cancelled
             Toast.makeText(requireContext(), "Cancelled...!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun uploadImage() {
+        GlobalScope.launch(Dispatchers.IO) {
+            // Credenciales de Azure Storage (reemplaza con tus propias credenciales)
+            val accountKey = BuildConfig.ACCOUNT_KEY
+
+            val storageConnectionString =
+                "DefaultEndpointsProtocol=https;AccountName=calorietracking;AccountKey=$accountKey;EndpointSuffix=core.windows.net"
+
+            // Nombre del contenedor en Azure Storage (reemplaza con tu contenedor)
+            val containerName = "calorietracking"
+
+            try {
+                // Crea la cuenta de almacenamiento
+                val storageAccount = CloudStorageAccount.parse(storageConnectionString)
+                val blobClient: CloudBlobClient = storageAccount.createCloudBlobClient()
+
+                // Obtén una referencia al contenedor
+                val container: CloudBlobContainer = blobClient.getContainerReference(containerName)
+
+                // Crea un nombre único para el blob (puedes usar un nombre aleatorio o basado en la fecha)
+                val imageName = "imagen.jpg"
+
+                // Obtén una referencia al blob en el contenedor
+                val blob: CloudBlockBlob = container.getBlockBlobReference(imageName)
+
+                // Convierte la imagen en un array de bytes
+                val imageStream: InputStream? = requireContext().contentResolver.openInputStream(image_uri!!)
+                val outputStream = ByteArrayOutputStream()
+                imageStream?.copyTo(outputStream)
+                val imageBytes: ByteArray = outputStream.toByteArray()
+
+                // Sube la imagen al blob
+                blob.uploadFromByteArray(imageBytes, 0, imageBytes.size)
+
+                // Notifica al usuario que la imagen se ha subido con éxito
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Imagen subida exitosamente", Toast.LENGTH_SHORT).show()
+                }
+
+            } catch (e: Exception) {
+                // Maneja cualquier error
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Error al subir la imagen", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 }

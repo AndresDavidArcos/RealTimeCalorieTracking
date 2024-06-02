@@ -26,7 +26,9 @@ import com.app.realtimecalorietracking.network.RetrofitInstance
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class evaluateFood : Fragment() {
 
     companion object {

@@ -29,8 +29,8 @@
             </intent-filter>
             </activity>
     </application>
-        <meta-data
-        android:name="ACCOUNT_KEY"
-        android:value="${ACCOUNT_KEY}" />
+    <meta-data
+        android:name="API_KEY"
+        android:value="${API_KEY}" />
 
 </manifest>

@@ -19,6 +19,7 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.app.realtimecalorietracking.BuildConfig
 import com.app.realtimecalorietracking.R
 import com.app.realtimecalorietracking.databinding.FragmentEvaluateFoodBinding
 import com.microsoft.azure.storage.CloudStorageAccount
@@ -219,7 +220,7 @@ class evaluateFood : Fragment() {
         val client = OkHttpClient()
         val url =
             "https://calorietracking.cognitiveservices.azure.com/computervision/imageanalysis:analyze?features=caption,read&model-version=latest&language=en&api-version=2024-02-01"
-        val apiKey = "db5927c1958a48baa133b8a0ec01cee4"
+        val apiKey = BuildConfig.API_KEY
 
         val requestBody = """
         {

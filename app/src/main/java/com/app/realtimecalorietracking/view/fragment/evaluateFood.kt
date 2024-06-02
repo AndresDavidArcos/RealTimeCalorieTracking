@@ -21,11 +21,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import com.app.realtimecalorietracking.databinding.FragmentEvaluateFoodBinding
+import com.app.realtimecalorietracking.model.FoodResponse
+import com.app.realtimecalorietracking.network.RetrofitInstance
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class evaluateFood : Fragment() {
 
     companion object {
         private const val TAG = "MAIN_TAG"
+        private const val APP_ID = "d672cbed"
+        private const val APP_KEY = "5bbd80e51d5d55f97365f0d16e7d1649"
     }
 
     private lateinit var mCaptureBtn: Button
@@ -58,7 +65,7 @@ class evaluateFood : Fragment() {
                 requestCameraPermissions.launch(cameraPermissions)
             }
         })
-
+        showCaloriesForDish("hamburger")
         return view
     }
 
@@ -114,4 +121,37 @@ class evaluateFood : Fragment() {
             Toast.makeText(requireContext(), "Cancelled...!", Toast.LENGTH_SHORT).show()
         }
     }
+
+    private fun getCaloriesForDish(dish: String, callback: (Float?) -> Unit) {
+        val call = RetrofitInstance.api.getFoodCalories(dish, APP_ID, APP_KEY)
+        call.enqueue(object : Callback<FoodResponse> {
+            override fun onResponse(call: Call<FoodResponse>, response: Response<FoodResponse>) {
+                if (response.isSuccessful) {
+                    val calories = response.body()?.parsed?.firstOrNull()?.food?.nutrients?.ENERC_KCAL
+                    callback(calories)
+                } else {
+                    callback(null)
+                }
+            }
+
+            override fun onFailure(call: Call<FoodResponse>, t: Throwable) {
+                callback(null)
+            }
+        })
+    }
+
+    private fun showCaloriesForDish(dish: String) {
+        getCaloriesForDish(dish) { calories ->
+            val message = if (calories != null) {
+                "The dish $dish has approximately $calories kcal."
+            } else {
+                "Could not retrieve calories for $dish."
+            }
+            Log.i("FOOD", "se recibio $dish y resulto tener $calories kcal")
+            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+        }
+    }
+
+
+
 }

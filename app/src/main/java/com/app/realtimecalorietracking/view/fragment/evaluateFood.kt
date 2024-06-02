@@ -30,7 +30,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
+import org.json.JSONObject
 import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.io.InputStream
 
 class evaluateFood : Fragment() {
@@ -79,7 +88,6 @@ class evaluateFood : Fragment() {
             mCalculateCaloriesBtn.setEnabled(false)
             Toast.makeText(requireContext(), "Calculating calories...", Toast.LENGTH_SHORT).show()
             uploadImage()
-            calculateCalories()
         })
 
 
@@ -104,7 +112,11 @@ class evaluateFood : Fragment() {
                     pickImageCamera()
                 } else {
                     //Camera or Storage or Both permissions are denied, Can't launch camera to capture image
-                    Toast.makeText(requireContext(), "Camera or Storage or both permissions denied...", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Camera or Storage or both permissions denied...",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         )
@@ -116,7 +128,10 @@ class evaluateFood : Fragment() {
         contentValues.put(MediaStore.Images.Media.TITLE, "TEMPORARY_IMAGE")
         contentValues.put(MediaStore.Images.Media.DESCRIPTION, "TEMPORARY_IMAGE_DESCRIPTION")
         //Uri of the image to be captured from camera
-        image_uri = requireContext().contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+        image_uri = requireContext().contentResolver.insert(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            contentValues
+        )
         //Intent to launch camera
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         intent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri)
@@ -168,7 +183,8 @@ class evaluateFood : Fragment() {
                 val blob: CloudBlockBlob = container.getBlockBlobReference(imageName)
 
                 // Convierte la imagen en un array de bytes
-                val imageStream: InputStream? = requireContext().contentResolver.openInputStream(image_uri!!)
+                val imageStream: InputStream? =
+                    requireContext().contentResolver.openInputStream(image_uri!!)
                 val outputStream = ByteArrayOutputStream()
                 imageStream?.copyTo(outputStream)
                 val imageBytes: ByteArray = outputStream.toByteArray()
@@ -177,22 +193,95 @@ class evaluateFood : Fragment() {
                 blob.uploadFromByteArray(imageBytes, 0, imageBytes.size)
 
                 // Notifica al usuario que la imagen se ha subido con éxito
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(), "Imagen subida exitosamente", Toast.LENGTH_SHORT).show()
-                }
+//                withContext(Dispatchers.Main) {
+//                    Toast.makeText(
+//                        requireContext(),
+//                        "Imagen subida exitosamente",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+
+                // Llama a la función para calcular las calorías
+                calculateCalories()
 
             } catch (e: Exception) {
                 // Maneja cualquier error
                 e.printStackTrace()
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(), "Error al subir la imagen", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Error al subir la imagen", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }
     }
 
     private fun calculateCalories() {
-        // Add functionality to calculate calories
-    }
+        val client = OkHttpClient()
+        val url =
+            "https://calorietracking.cognitiveservices.azure.com/computervision/imageanalysis:analyze?features=caption,read&model-version=latest&language=en&api-version=2024-02-01"
+        val apiKey = "db5927c1958a48baa133b8a0ec01cee4"
 
+        val requestBody = """
+        {
+            "url": "https://calorietracking.blob.core.windows.net/calorietracking/imagen.jpg"
+        }
+    """.trimIndent()
+
+        val request = Request.Builder()
+            .url(url)
+            .addHeader("Ocp-Apim-Subscription-Key", apiKey)
+            .addHeader("Content-Type", "application/json")
+            .post(requestBody.toRequestBody("application/json".toMediaTypeOrNull()))
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+                requireActivity().runOnUiThread {
+                    Toast.makeText(
+                        requireContext(),
+                        "Error al calcular las calorías",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                if (!response.isSuccessful) {
+                    requireActivity().runOnUiThread {
+                        Toast.makeText(
+                            requireContext(),
+                            "Error en la respuesta de la API",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    throw IOException("Unexpected code $response")
+                } else {
+                    val responseData = response.body?.string()
+                    try {
+                        val json = responseData?.let { JSONObject(it) }
+                        val captionResult = json?.getJSONObject("captionResult")
+                        val caption = captionResult?.getString("text")
+
+                        requireActivity().runOnUiThread {
+                            Toast.makeText(
+                                requireContext(),
+                                "Descripción: $caption",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        requireActivity().runOnUiThread {
+                            Toast.makeText(
+                                requireContext(),
+                                e.message,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }
+            }
+        })
+    }
 }

@@ -79,4 +79,8 @@ dependencies {
 
     //calculate calories
     implementation ("com.microsoft.azure.android:azure-storage-android:2.0.0")
+
+    // Analyze
+    implementation ("com.squareup.okhttp3:okhttp:4.9.2")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.2")
 }

@@ -3,6 +3,8 @@ package com.app.realtimecalorietracking.di
 import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.app.realtimecalorietracking.repository.LoginRepository
+import com.app.realtimecalorietracking.viewmodel.LoginViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,13 +17,13 @@ import javax.inject.Singleton
 object Module {
     @Singleton
     @Provides
-    fun provideDb(@ApplicationContext context: Context):FirebaseFirestore{
+    fun provideDb(@ApplicationContext context: Context): FirebaseFirestore {
         return FirebaseFirestore.getInstance()
     }
+
     @Singleton
     @Provides
-    fun provideAuth(@ApplicationContext context: Context):FirebaseAuth{
+    fun provideAuth(@ApplicationContext context: Context): FirebaseAuth {
         return FirebaseAuth.getInstance()
     }
-
 }

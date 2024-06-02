@@ -77,11 +77,11 @@ class LoginActivity : AppCompatActivity() {
         binding.btnLogin.isEnabled = email.isNotEmpty() && password.isNotEmpty()
         binding.tvRegister.isEnabled = email.isNotEmpty() && password.isNotEmpty()
         binding.tvRegister.setTextColor(Color.parseColor("#FFFFFFFF"))
-        if (binding.btnLogin.isEnabled){
-
+        if (binding.btnLogin.isEnabled or binding.tvRegister.isEnabled){
+            binding.tvRegister.setTextColor(Color.BLACK)
             binding.btnLogin.setTextColor(Color.WHITE)
         }else{
-
+            binding.tvRegister.setTextColor(Color.GRAY)
             binding.btnLogin.setTextColor(Color.GRAY)
         }
     }
@@ -129,32 +129,19 @@ class LoginActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-    private fun loginUser(){
+
+    private fun loginUser() {
         val email = binding.etEmail.text.toString()
         val pass = binding.etPass.text.toString()
-        if (pass.length > 5){
-            loginViewModel.loginUser(email,pass){ isLogin ->
-                if (isLogin){
-                    sharedPreferences.edit().putString("email",email).apply()
-                    if(intent.extras?.containsKey("OnLoginRedirectToWidget") == true){
-                        goToHome(email)
-                        moveTaskToBack(true)
-                    }else{
-                        goToHome(email)
-                    }
-
-                }else {
-                    Toast.makeText(this, "Login incorrecto", Toast.LENGTH_SHORT).show()
-                }
+        loginViewModel.loginUser(email, pass) { isLogin ->
+            if (isLogin) {
+                goToHome(email)
+            } else {
+                Toast.makeText(this, "Login incorrecto", Toast.LENGTH_SHORT).show()
             }
-        }else{
-            val pass = binding.tilPass
-            pass.error = "Mínimo 6 dígitos"
-//            Toast.makeText(this, "666", Toast.LENGTH_SHORT).show()
-            errorVar = true
         }
-
     }
+
     private fun sesion(){
         val email = sharedPreferences.getString("email",null)
         loginViewModel.sesion(email){ isEnableView ->

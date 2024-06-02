@@ -1,5 +1,6 @@
 package com.app.realtimecalorietracking
 
+import android.appwidget.AppWidgetManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.NavController

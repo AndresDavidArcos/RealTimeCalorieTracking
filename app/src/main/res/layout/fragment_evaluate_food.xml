@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.view.fragment.evaluateFood">
+    tools:context=".view.fragment.evaluateFood">
 
     <ImageView
         android:id="@+id/imageView"
@@ -14,7 +14,7 @@
         android:scaleType="centerCrop" />
 
 
-    <!-- Botón en la parte inferior -->
+    <!-- Botón para capturar comida -->
     <Button
         android:id="@+id/captureButton"
         android:layout_width="match_parent"
@@ -26,4 +26,16 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="60dp" />
 
+    <!-- Nuevo botón para calcular calorías -->
+    <Button
+        android:id="@+id/calculateCaloriesButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Calcular calorias"
+        android:textStyle="bold"
+        android:textColor="#ffffff"
+        android:background="@color/design_default_color_primary"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="120dp"
+        android:visibility="gone" />
 </FrameLayout>

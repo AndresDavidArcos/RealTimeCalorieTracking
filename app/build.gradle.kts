@@ -4,7 +4,7 @@ plugins {
     id("com.google.gms.google-services")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
-
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -19,6 +19,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+//        val properties = Properties()
+//        properties.load(project.rootProject.file("local.properties").inputStream())
+//        buildConfigField("String", "API_KEY", "\"${properties.getProperty(" API_KEY ")}\"")
     }
 
     buildTypes {
@@ -41,6 +45,7 @@ android {
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        buildConfig = true
     }
 }
 
@@ -109,7 +114,13 @@ dependencies {
     implementation ("androidx.activity:activity-ktx:1.8.0")
     implementation ("androidx.fragment:fragment-ktx:1.6.2")
 
+    //calculate calories
+    implementation ("com.microsoft.azure.android:azure-storage-android:2.0.0")
+
+    // Analyze
+    implementation ("com.squareup.okhttp3:okhttp:4.9.2")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.2")
+    
     //para el editText
     implementation ("com.google.android.material:material:1.4.0")
-
 }

@@ -1,39 +1,37 @@
 package com.app.realtimecalorietracking.view.fragment
 
-import android.net.Uri
 import android.Manifest
-import android.os.Build
-import android.util.Log
-import android.os.Bundle
-import android.view.View
-import android.widget.Toast
-import android.widget.Button
-import android.content.Intent
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.view.LayoutInflater
-import android.provider.MediaStore
 import android.content.ContentValues
-import androidx.fragment.app.Fragment
-import com.app.realtimecalorietracking.R
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
-import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.app.realtimecalorietracking.R
 import com.app.realtimecalorietracking.databinding.FragmentEvaluateFoodBinding
-
 import com.microsoft.azure.storage.CloudStorageAccount
 import com.microsoft.azure.storage.blob.CloudBlobClient
 import com.microsoft.azure.storage.blob.CloudBlobContainer
 import com.microsoft.azure.storage.blob.CloudBlockBlob
 import kotlinx.coroutines.DelicateCoroutinesApi
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
-
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
 
 class evaluateFood : Fragment() {
 
@@ -81,7 +79,7 @@ class evaluateFood : Fragment() {
             mCalculateCaloriesBtn.setEnabled(false)
             Toast.makeText(requireContext(), "Calculating calories...", Toast.LENGTH_SHORT).show()
             uploadImage()
-//            calculateCalories()
+            calculateCalories()
         })
 
 
@@ -192,4 +190,9 @@ class evaluateFood : Fragment() {
             }
         }
     }
+
+    private fun calculateCalories() {
+        // Add functionality to calculate calories
+    }
+
 }

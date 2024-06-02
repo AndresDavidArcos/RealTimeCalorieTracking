@@ -274,10 +274,13 @@ class evaluateFood : Fragment() {
                         requireActivity().runOnUiThread {
                             Toast.makeText(
                                 requireContext(),
-                                "Descripción: $caption",
+                                "Comida: $caption",
                                 Toast.LENGTH_LONG
                             ).show()
                         }
+
+                        caption?.let { showCaloriesForDish(it) }
+
                     } catch (e: Exception) {
                         e.printStackTrace()
                         requireActivity().runOnUiThread {

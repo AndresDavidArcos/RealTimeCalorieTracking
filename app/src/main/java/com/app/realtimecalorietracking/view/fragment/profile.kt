@@ -8,8 +8,9 @@ import android.view.ViewGroup
 import com.app.realtimecalorietracking.R
 import com.app.realtimecalorietracking.databinding.FragmentHomeBinding
 import com.app.realtimecalorietracking.databinding.FragmentProfileBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class profile : Fragment() {
     private lateinit var binding: FragmentProfileBinding
 

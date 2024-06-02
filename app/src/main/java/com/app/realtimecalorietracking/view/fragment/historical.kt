@@ -10,8 +10,10 @@ import com.app.realtimecalorietracking.databinding.FragmentHistoricalBinding
 import com.app.realtimecalorietracking.model.Goals
 import com.app.realtimecalorietracking.adapter.HistoricalAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 
+@AndroidEntryPoint
 class historical : Fragment() {
     private lateinit var binding: FragmentHistoricalBinding
 

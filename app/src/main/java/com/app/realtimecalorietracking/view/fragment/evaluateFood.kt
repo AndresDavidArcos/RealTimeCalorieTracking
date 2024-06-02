@@ -31,22 +31,23 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.Call
-import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.Response
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
 import com.app.realtimecalorietracking.model.FoodResponse
 import com.app.realtimecalorietracking.network.RetrofitInstance
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import okhttp3.Call as OkHttpCall
+import okhttp3.Callback as OkHttpCallback
+import okhttp3.Response as OkHttpResponse
+import retrofit2.Call as RetrofitCall
+import retrofit2.Callback as RetrofitCallback
+import retrofit2.Response as RetrofitResponse
+
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -93,8 +94,8 @@ class evaluateFood : Fragment() {
         // Button click to calculate calories
         mCalculateCaloriesBtn.setOnClickListener(View.OnClickListener {
             // Add functionality to calculate calories
-            mCaptureBtn.setEnabled(false)
-            mCalculateCaloriesBtn.setEnabled(false)
+            mCaptureBtn.isEnabled = false
+            mCalculateCaloriesBtn.isEnabled = false
             Toast.makeText(requireContext(), "Calculating calories...", Toast.LENGTH_SHORT).show()
             uploadImage()
         })
@@ -200,13 +201,13 @@ class evaluateFood : Fragment() {
                 blob.uploadFromByteArray(imageBytes, 0, imageBytes.size)
 
                 // Notifica al usuario que la imagen se ha subido con éxito
-//                withContext(Dispatchers.Main) {
-//                    Toast.makeText(
-//                        requireContext(),
-//                        "Imagen subida exitosamente",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
+                // withContext(Dispatchers.Main) {
+                //    Toast.makeText(
+                //        requireContext(),
+                //        "Imagen subida exitosamente",
+                //        Toast.LENGTH_SHORT
+                //    ).show()
+                // }
 
                 // Llama a la función para calcular las calorías
                 calculateCalories()
@@ -232,7 +233,7 @@ class evaluateFood : Fragment() {
         {
             "url": "https://calorietracking.blob.core.windows.net/calorietracking/imagen.jpg"
         }
-    """.trimIndent()
+        """.trimIndent()
 
         val request = Request.Builder()
             .url(url)
@@ -241,8 +242,8 @@ class evaluateFood : Fragment() {
             .post(requestBody.toRequestBody("application/json".toMediaTypeOrNull()))
             .build()
 
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
+        client.newCall(request).enqueue(object : OkHttpCallback {
+            override fun onFailure(call: OkHttpCall, e: IOException) {
                 e.printStackTrace()
                 requireActivity().runOnUiThread {
                     Toast.makeText(
@@ -253,7 +254,7 @@ class evaluateFood : Fragment() {
                 }
             }
 
-            override fun onResponse(call: Call, response: Response) {
+            override fun onResponse(call: OkHttpCall, response: OkHttpResponse) {
                 if (!response.isSuccessful) {
                     requireActivity().runOnUiThread {
                         Toast.makeText(
@@ -291,12 +292,11 @@ class evaluateFood : Fragment() {
             }
         })
     }
-}
-=======
+
     private fun getCaloriesForDish(dish: String, callback: (Float?) -> Unit) {
         val call = RetrofitInstance.api.getFoodCalories(dish, APP_ID, APP_KEY)
-        call.enqueue(object : Callback<FoodResponse> {
-            override fun onResponse(call: Call<FoodResponse>, response: Response<FoodResponse>) {
+        call.enqueue(object : RetrofitCallback<FoodResponse> {
+            override fun onResponse(call: RetrofitCall<FoodResponse>, response: RetrofitResponse<FoodResponse>) {
                 if (response.isSuccessful) {
                     val calories = response.body()?.parsed?.firstOrNull()?.food?.nutrients?.ENERC_KCAL
                     callback(calories)
@@ -305,7 +305,7 @@ class evaluateFood : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call<FoodResponse>, t: Throwable) {
+            override fun onFailure(call: RetrofitCall<FoodResponse>, t: Throwable) {
                 callback(null)
             }
         })
@@ -319,10 +319,6 @@ class evaluateFood : Fragment() {
                 "Could not retrieve calories for $dish."
             }
             Log.i("FOOD", "se recibio $dish y resulto tener $calories kcal")
-            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
         }
     }
-
-
-
 }

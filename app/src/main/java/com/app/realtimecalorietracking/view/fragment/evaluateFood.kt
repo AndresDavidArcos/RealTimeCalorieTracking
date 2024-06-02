@@ -42,11 +42,20 @@ import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
+import com.app.realtimecalorietracking.model.FoodResponse
+import com.app.realtimecalorietracking.network.RetrofitInstance
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class evaluateFood : Fragment() {
 
     companion object {
         private const val TAG = "MAIN_TAG"
+        private const val APP_ID = "d672cbed"
+        private const val APP_KEY = "5bbd80e51d5d55f97365f0d16e7d1649"
     }
 
     private lateinit var mCaptureBtn: Button
@@ -81,7 +90,6 @@ class evaluateFood : Fragment() {
                 requestCameraPermissions.launch(cameraPermissions)
             }
         })
-
         // Button click to calculate calories
         mCalculateCaloriesBtn.setOnClickListener(View.OnClickListener {
             // Add functionality to calculate calories
@@ -90,8 +98,6 @@ class evaluateFood : Fragment() {
             Toast.makeText(requireContext(), "Calculating calories...", Toast.LENGTH_SHORT).show()
             uploadImage()
         })
-
-
         return view
     }
 
@@ -285,4 +291,38 @@ class evaluateFood : Fragment() {
             }
         })
     }
+}
+=======
+    private fun getCaloriesForDish(dish: String, callback: (Float?) -> Unit) {
+        val call = RetrofitInstance.api.getFoodCalories(dish, APP_ID, APP_KEY)
+        call.enqueue(object : Callback<FoodResponse> {
+            override fun onResponse(call: Call<FoodResponse>, response: Response<FoodResponse>) {
+                if (response.isSuccessful) {
+                    val calories = response.body()?.parsed?.firstOrNull()?.food?.nutrients?.ENERC_KCAL
+                    callback(calories)
+                } else {
+                    callback(null)
+                }
+            }
+
+            override fun onFailure(call: Call<FoodResponse>, t: Throwable) {
+                callback(null)
+            }
+        })
+    }
+
+    private fun showCaloriesForDish(dish: String) {
+        getCaloriesForDish(dish) { calories ->
+            val message = if (calories != null) {
+                "The dish $dish has approximately $calories kcal."
+            } else {
+                "Could not retrieve calories for $dish."
+            }
+            Log.i("FOOD", "se recibio $dish y resulto tener $calories kcal")
+            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+        }
+    }
+
+
+
 }

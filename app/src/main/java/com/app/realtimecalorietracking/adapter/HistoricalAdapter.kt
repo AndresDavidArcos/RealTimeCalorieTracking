@@ -4,23 +4,24 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.realtimecalorietracking.databinding.ItemHistoricalRecordBinding
-import com.app.realtimecalorietracking.model.Goals
+import com.app.realtimecalorietracking.model.DailyRecord
 import java.text.SimpleDateFormat
 import java.util.*
 
 class HistoricalAdapter(
-    private val goalsList: List<Goals>,
-    private val onItemClick: (Goals) -> Unit
+    private val dailyRecords: List<DailyRecord>,
+    private val onItemClick: (DailyRecord) -> Unit
 ) : RecyclerView.Adapter<HistoricalAdapter.HistoricalViewHolder>() {
 
     inner class HistoricalViewHolder(private val binding: ItemHistoricalRecordBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(goal: Goals) {
-            binding.textViewDate.text = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(goal.date)
-            binding.textViewCaloriesConsumed.text = "Calories Consumed: ${goal.calories}"
-            binding.textViewCaloriesGoal.text = "Goal: ${goal.calories} kcal"
+        fun bind(record: DailyRecord) {
+            binding.textViewDate.text ="Fecha: "+ SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(record.date)
+            val totalCaloriesConsumed = record.foods.sumOf { it.calories }
+            binding.textViewCaloriesConsumed.text = "Calorias consumidas: $totalCaloriesConsumed"
+            binding.textViewCaloriesGoal.text = "Meta: ${record.goal?.calories ?: "N/A"} kcal"
 
             binding.root.setOnClickListener {
-                onItemClick(goal)
+                onItemClick(record)
             }
         }
     }
@@ -31,8 +32,8 @@ class HistoricalAdapter(
     }
 
     override fun onBindViewHolder(holder: HistoricalViewHolder, position: Int) {
-        holder.bind(goalsList[position])
+        holder.bind(dailyRecords[position])
     }
 
-    override fun getItemCount(): Int = goalsList.size
+    override fun getItemCount(): Int = dailyRecords.size
 }

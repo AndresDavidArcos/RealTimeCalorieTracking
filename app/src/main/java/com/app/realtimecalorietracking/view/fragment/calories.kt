@@ -1,23 +1,36 @@
 package com.app.realtimecalorietracking.view.fragment
 
+import android.appwidget.AppWidgetManager
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.content.SharedPreferences
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.navigation.fragment.findNavController
 import com.app.realtimecalorietracking.databinding.FragmentCaloriesBinding
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.app.realtimecalorietracking.MainActivity
+import com.app.realtimecalorietracking.R
 import com.app.realtimecalorietracking.adapter.CaloriesItem
 import com.app.realtimecalorietracking.adapter.CaloriesAdapter
+import com.app.realtimecalorietracking.view.LoginActivity
+import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
+import com.google.firebase.firestore.FirebaseFirestore
 
-
+@AndroidEntryPoint
 class calories : Fragment() {
 
     private lateinit var binding: FragmentCaloriesBinding
     private lateinit var adapter: CaloriesAdapter
     private lateinit var calorieItemList: MutableList<CaloriesItem>
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +64,13 @@ class calories : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sharedPreferences = requireActivity().getSharedPreferences("shared", Context.MODE_PRIVATE)
+        controladores()
+
+    }
+
     private fun filterRecentItems(items: List<CaloriesItem>, days: Int): List<CaloriesItem> {
         val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
         val currentDate = Date()
@@ -76,5 +96,26 @@ class calories : Fragment() {
                 val calories = it.calorias.replace(regex, "") // Eliminar caracteres no numéricos
                 calories.toIntOrNull() ?: 0
             }
+    }
+
+    private fun logOut() {
+        sharedPreferences.edit().clear().apply()
+        FirebaseAuth.getInstance().signOut()
+        (requireActivity() as MainActivity).apply {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
+    }
+
+    private fun controladores() {
+        val btnLogOut: ImageView = binding.root.findViewById(R.id.btnLogOut)
+        btnLogOut.setOnClickListener {
+            it.animate().scaleX(0.8f).scaleY(0.8f).setDuration(200).withEndAction {
+                it.animate().scaleX(1f).scaleY(1f).setDuration(200).start()
+                //activity?.onBackPressedDispatcher?.onBackPressed()
+                logOut()
+            }.start()
+        }
+
     }
 }

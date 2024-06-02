@@ -67,7 +67,6 @@ class evaluateFood : Fragment() {
                 requestCameraPermissions.launch(cameraPermissions)
             }
         })
-        showCaloriesForDish("hamburger")
         return view
     }
 

@@ -21,7 +21,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import com.app.realtimecalorietracking.databinding.FragmentEvaluateFoodBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class evaluateFood : Fragment() {
 
     companion object {

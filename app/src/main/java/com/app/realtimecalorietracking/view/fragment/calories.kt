@@ -9,10 +9,11 @@ import com.app.realtimecalorietracking.databinding.FragmentCaloriesBinding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.realtimecalorietracking.adapter.CaloriesItem
 import com.app.realtimecalorietracking.adapter.CaloriesAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
 
-
+@AndroidEntryPoint
 class calories : Fragment() {
 
     private lateinit var binding: FragmentCaloriesBinding

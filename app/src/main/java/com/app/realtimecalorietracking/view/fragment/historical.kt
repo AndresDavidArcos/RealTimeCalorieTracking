@@ -21,15 +21,15 @@ class historical : Fragment() {
 
     private val foodsList: List<Food> = listOf(
         // Dummy data
-        Food(1, 1, Date(2023, 5, 25), "Apple", 100),
-        Food(2, 1, Date(2023, 5, 25), "Sandwich", 300),
-        Food(3, 1, Date(2023, 5, 26), "Orange Juice", 150)
+        Food("andy",  Date(2023, 5, 25), "Apple", 100),
+        Food("andy",  Date(2023, 5, 25), "Sandwich", 300),
+        Food("andy",  Date(2023, 5, 26), "Orange Juice", 150)
     )
 
     private val goalsList: List<Goals> = listOf(
         // Dummy data
-        Goals(1, 1, Date(2023, 5, 25), 2000),
-        Goals(2, 1, Date(2023, 5, 26), 2200)
+        Goals("andy",  Date(2023, 5, 25), 2000),
+        Goals("andy",  Date(2023, 5, 26), 2200)
     )
 
     override fun onCreateView(

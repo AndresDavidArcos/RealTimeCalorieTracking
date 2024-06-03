@@ -4,8 +4,7 @@ import java.io.Serializable
 import java.util.Date
 
 data class Food(
-    val food_id: Int,
-    val user_id: Int,
+    val user_id: String,
     val date: Date,
     val name: String,
     val calories: Int

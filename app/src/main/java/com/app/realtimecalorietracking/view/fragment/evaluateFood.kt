@@ -1,5 +1,6 @@
 package com.app.realtimecalorietracking.view.fragment
 
+import android.app.AlertDialog
 import android.Manifest
 import android.content.ContentValues
 import android.content.Intent
@@ -22,6 +23,7 @@ import androidx.fragment.app.Fragment
 import com.app.realtimecalorietracking.BuildConfig
 import com.app.realtimecalorietracking.R
 import com.app.realtimecalorietracking.databinding.FragmentEvaluateFoodBinding
+import com.app.realtimecalorietracking.model.Food
 import com.microsoft.azure.storage.CloudStorageAccount
 import com.microsoft.azure.storage.blob.CloudBlobClient
 import com.microsoft.azure.storage.blob.CloudBlobContainer
@@ -41,14 +43,17 @@ import java.io.IOException
 import java.io.InputStream
 import com.app.realtimecalorietracking.model.FoodResponse
 import com.app.realtimecalorietracking.network.RetrofitInstance
+import com.google.firebase.firestore.FirebaseFirestore
 import okhttp3.Call as OkHttpCall
 import okhttp3.Callback as OkHttpCallback
 import okhttp3.Response as OkHttpResponse
 import retrofit2.Call as RetrofitCall
 import retrofit2.Callback as RetrofitCallback
 import retrofit2.Response as RetrofitResponse
+import android.content.Context
 
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Date
 
 @AndroidEntryPoint
 class evaluateFood : Fragment() {
@@ -316,12 +321,47 @@ class evaluateFood : Fragment() {
 
     private fun showCaloriesForDish(dish: String) {
         getCaloriesForDish(dish) { calories ->
-            val message = if (calories != null) {
-                "The dish $dish has approximately $calories kcal."
+            if (calories != null) {
+                val message = "Food $dish has been identified  and has approximately $calories kcal. ¿Want to add it?"
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Food calories")
+                    .setMessage(message)
+                    .setPositiveButton("OK") { dialog, _ ->
+                        saveDishToFirebase(dish, calories)
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("Cancel") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .create()
+                    .show()
             } else {
-                "Could not retrieve calories for $dish."
+                Toast.makeText(requireContext(), "Could not get calories for $dish.", Toast.LENGTH_SHORT).show()
             }
-            Log.i("FOOD", "se recibio $dish y resulto tener $calories kcal")
         }
+    }
+
+    private fun saveDishToFirebase(dish: String, calories: Float) {
+        val db = FirebaseFirestore.getInstance()
+        val sharedPref = requireActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val email = sharedPref.getString("email", null)
+
+        val food = Food(
+            user_id = email!!,
+            date = Date(),
+            name = dish,
+            calories = calories.toInt()
+        )
+
+        db.collection("foods")
+            .add(food)
+            .addOnSuccessListener { documentReference ->
+                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                Toast.makeText(requireContext(), "Food added correctly.", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error adding document", e)
+                Toast.makeText(requireContext(), "Error when adding food.", Toast.LENGTH_SHORT).show()
+            }
     }
 }

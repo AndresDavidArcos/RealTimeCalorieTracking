@@ -51,6 +51,8 @@ import retrofit2.Call as RetrofitCall
 import retrofit2.Callback as RetrofitCallback
 import retrofit2.Response as RetrofitResponse
 import android.content.Context
+import com.app.realtimecalorietracking.databinding.FragmentCaloriesBinding
+import com.app.realtimecalorietracking.view.dialog.CalorieAlertDialog
 
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
@@ -62,6 +64,7 @@ class evaluateFood : Fragment() {
         private const val TAG = "MAIN_TAG"
         private const val APP_ID = "d672cbed"
         private const val APP_KEY = "5bbd80e51d5d55f97365f0d16e7d1649"
+        private const val CALORIE_LIMIT = 5000 // TODO calcular limite recomendado con datos de usuario
     }
 
     private lateinit var mCaptureBtn: Button
@@ -71,6 +74,7 @@ class evaluateFood : Fragment() {
     private var image_uri: Uri? = null
 
     private lateinit var binding: FragmentEvaluateFoodBinding
+    private lateinit var binding2: FragmentCaloriesBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -322,6 +326,21 @@ class evaluateFood : Fragment() {
     private fun showCaloriesForDish(dish: String) {
         getCaloriesForDish(dish) { calories ->
             if (calories != null) {
+
+                val currentCaloriesText = binding2.tvTotalCalories.text.toString().replace("[^0-9]".toRegex(), "")
+                val currentCalories = if (currentCaloriesText.isNotEmpty()) currentCaloriesText.toInt() else 0
+                val newTotalCalories = currentCalories + calories
+
+                if (newTotalCalories >= CALORIE_LIMIT) {
+                    // Mostrar el diálogo o realizar la acción correspondiente
+                    val excessCalories = newTotalCalories - CALORIE_LIMIT
+                    val dialog = CalorieAlertDialog(excessCalories)
+                    dialog.show(parentFragmentManager, "CalorieAlertDialog")
+                } else {
+                    // No hacer nada o realizar otra acción
+                }
+
+
                 val message = "Food $dish has been identified  and has approximately $calories kcal. ¿Want to add it?"
                 AlertDialog.Builder(requireContext())
                     .setTitle("Food calories")

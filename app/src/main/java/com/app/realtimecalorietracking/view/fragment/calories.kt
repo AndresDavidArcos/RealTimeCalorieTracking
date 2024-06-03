@@ -85,7 +85,7 @@ class calories : Fragment() {
         }
     }
 
-    private fun calculateCaloriesForToday(items: List<CaloriesItem>): Int {
+    fun calculateCaloriesForToday(items: List<CaloriesItem>): Int {
         val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
         val currentDate = sdf.format(Date())
         val regex =

@@ -327,7 +327,7 @@ class evaluateFood : Fragment() {
         getCaloriesForDish(dish) { calories ->
             if (calories != null) {
 
-                val currentCaloriesText = binding2.tvTotalCalories.text.toString().replace("[^0-9]".toRegex(), "")
+  /*              val currentCaloriesText = binding2.tvTotalCalories.text.toString().replace("[^0-9]".toRegex(), "")
                 val currentCalories = if (currentCaloriesText.isNotEmpty()) currentCaloriesText.toInt() else 0
                 val newTotalCalories = currentCalories + calories
 
@@ -339,7 +339,7 @@ class evaluateFood : Fragment() {
                 } else {
                     // No hacer nada o realizar otra acción
                 }
-
+*/
 
                 val message = "Food $dish has been identified  and has approximately $calories kcal. ¿Want to add it?"
                 AlertDialog.Builder(requireContext())

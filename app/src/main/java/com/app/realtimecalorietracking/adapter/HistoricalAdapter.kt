@@ -17,8 +17,8 @@ class HistoricalAdapter(
         fun bind(record: DailyRecord) {
             binding.textViewDate.text ="Fecha: "+ SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(record.date)
             val totalCaloriesConsumed = record.foods.sumOf { it.calories }
-            binding.textViewCaloriesConsumed.text = "Calorias consumidas: $totalCaloriesConsumed"
-            binding.textViewCaloriesGoal.text = "Meta: ${record.goal?.calories ?: "N/A"} kcal"
+            binding.textViewCaloriesConsumed.text = "Consumed calories: $totalCaloriesConsumed"
+            binding.textViewCaloriesGoal.text = "Goal: ${record.goal?.calories ?: "N/A"} kcal"
 
             binding.root.setOnClickListener {
                 onItemClick(record)

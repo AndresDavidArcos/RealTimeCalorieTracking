@@ -30,7 +30,6 @@ class calories : Fragment() {
     private lateinit var binding: FragmentCaloriesBinding
     private lateinit var adapter: CaloriesAdapter
     private lateinit var calorieItemList: MutableList<CaloriesItem>
-    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,12 +39,12 @@ class calories : Fragment() {
 
         // Initialize data
         calorieItemList = mutableListOf(
-            CaloriesItem("Spaguettis", "300 Cal", "26-05-2024"),
-            CaloriesItem("Helado", "100 Cal", "26-05-2024"),
-            CaloriesItem("Ensalada", "200 Cal", "25-05-2024"),
-            CaloriesItem("Pizza", "400 Cal", "24-05-2024"),
-            CaloriesItem("Sushi", "300 Cal", "20-05-2024"),
-            CaloriesItem("Hamburguesa", "500 Cal", "19-05-2024")
+            CaloriesItem("Spaguettis", "300 Cal", "10-06-2024"),
+            CaloriesItem("Helado", "100 Cal", "10-06-2024"),
+            CaloriesItem("Ensalada", "200 Cal", "10-06-2024"),
+            CaloriesItem("Pizza", "400 Cal", "10-06-2024"),
+            CaloriesItem("Sushi", "300 Cal", "10-06-2024"),
+            CaloriesItem("Hamburguesa", "500 Cal", "10-06-2024")
             // Add more items as needed
         )
 
@@ -66,8 +65,6 @@ class calories : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedPreferences = requireActivity().getSharedPreferences("shared", Context.MODE_PRIVATE)
-        controladores()
 
     }
 
@@ -96,26 +93,5 @@ class calories : Fragment() {
                 val calories = it.calorias.replace(regex, "") // Eliminar caracteres no numéricos
                 calories.toIntOrNull() ?: 0
             }
-    }
-
-    private fun logOut() {
-        sharedPreferences.edit().clear().apply()
-        FirebaseAuth.getInstance().signOut()
-        (requireActivity() as MainActivity).apply {
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
-        }
-    }
-
-    private fun controladores() {
-        val btnLogOut: ImageView = binding.root.findViewById(R.id.btnLogOut)
-        btnLogOut.setOnClickListener {
-            it.animate().scaleX(0.8f).scaleY(0.8f).setDuration(200).withEndAction {
-                it.animate().scaleX(1f).scaleY(1f).setDuration(200).start()
-                //activity?.onBackPressedDispatcher?.onBackPressed()
-                logOut()
-            }.start()
-        }
-
     }
 }

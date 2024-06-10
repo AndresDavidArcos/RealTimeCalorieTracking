@@ -20,7 +20,8 @@
             android:text="Nombre Plato de Comida"
             android:textAppearance="?attr/textAppearanceHeadline6"
             android:textStyle="bold"
-            android:paddingBottom="4dp"/>
+            android:paddingBottom="4dp"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tv_calorias"
@@ -28,7 +29,8 @@
             android:layout_height="wrap_content"
             android:text="Calorías del Plato"
             android:textAppearance="?attr/textAppearanceBody1"
-            android:paddingBottom="4dp"/>
+            android:paddingBottom="4dp"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tv_fecha"
@@ -36,7 +38,8 @@
             android:layout_height="wrap_content"
             android:text="Fecha"
             android:textAppearance="?attr/textAppearanceBody2"
-            android:textColor="?attr/colorOnSurface"/>
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

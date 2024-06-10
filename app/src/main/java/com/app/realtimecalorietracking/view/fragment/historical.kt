@@ -12,25 +12,14 @@ import com.app.realtimecalorietracking.model.Food
 import com.app.realtimecalorietracking.model.Goals
 import com.app.realtimecalorietracking.adapter.HistoricalAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 
 @AndroidEntryPoint
 class historical : Fragment() {
     private lateinit var binding: FragmentHistoricalBinding
-
-    private val foodsList: List<Food> = listOf(
-        // Dummy data
-        Food("andy",  Date(2023, 5, 25), "Apple", 100),
-        Food("andy",  Date(2023, 5, 25), "Sandwich", 300),
-        Food("andy",  Date(2023, 5, 26), "Orange Juice", 150)
-    )
-
-    private val goalsList: List<Goals> = listOf(
-        // Dummy data
-        Goals("andy",  Date(2023, 5, 25), 2000),
-        Goals("andy",  Date(2023, 5, 26), 2200)
-    )
+    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +27,51 @@ class historical : Fragment() {
     ): View {
         binding = FragmentHistoricalBinding.inflate(inflater, container, false)
 
+        fetchFoodsAndGoals()
+
+        return binding.root
+    }
+
+    private fun fetchFoodsAndGoals() {
+        val foodsList = mutableListOf<Food>()
+        val goalsList = mutableListOf<Goals>()
+
+        db.collection("foods")
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val food = document.toObject(Food::class.java)
+                    foodsList.add(food)
+                }
+                fetchGoals(foodsList, goalsList)
+            }
+            .addOnFailureListener { exception ->
+                handleFirebaseError(exception, "Error al obtener los datos de alimentos")
+            }
+    }
+
+    private fun fetchGoals(foodsList: List<Food>, goalsList: MutableList<Goals>) {
+        db.collection("goals")
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val goal = document.toObject(Goals::class.java)
+                    goalsList.add(goal)
+                }
+                setupRecyclerView(foodsList, goalsList)
+            }
+            .addOnFailureListener { exception ->
+                handleFirebaseError(exception, "Error al obtener los datos de metas")
+            }
+    }
+    private fun handleFirebaseError(exception: Exception, message: String) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Error")
+            .setMessage("$message: ${exception.message}")
+            .setPositiveButton("OK", null)
+            .show()
+    }
+    private fun setupRecyclerView(foodsList: List<Food>, goalsList: List<Goals>) {
         val dailyRecords = processDailyRecords(foodsList, goalsList)
         val adapter = HistoricalAdapter(dailyRecords) { record ->
             showFoodDetails(record)
@@ -45,8 +79,6 @@ class historical : Fragment() {
 
         binding.recyclerViewHistorical.layoutManager = LinearLayoutManager(context)
         binding.recyclerViewHistorical.adapter = adapter
-
-        return binding.root
     }
 
     fun processDailyRecords(foods: List<Food>, goals: List<Goals>): List<DailyRecord> {
@@ -65,7 +97,7 @@ class historical : Fragment() {
         val foodDetails = record.foods.joinToString("\n") { "${it.name} - ${it.calories} kcal" }
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Detalles del registro de ${record.date}")
+            .setTitle("Details of record in ${record.date}")
             .setMessage(foodDetails)
             .setPositiveButton("OK", null)
             .show()

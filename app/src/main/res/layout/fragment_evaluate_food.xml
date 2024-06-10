@@ -1,0 +1,41 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragment.evaluateFood">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:src="@drawable/image_preview"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="60dp"
+        android:scaleType="centerCrop" />
+
+
+    <!-- Botón para capturar comida -->
+    <Button
+        android:id="@+id/captureButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Capturar comida"
+        android:textStyle="bold"
+        android:textColor="#ffffff"
+        android:background="@color/design_default_color_primary"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="60dp" />
+
+    <!-- Nuevo botón para calcular calorías -->
+    <Button
+        android:id="@+id/calculateCaloriesButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Calcular calorias"
+        android:textStyle="bold"
+        android:textColor="#ffffff"
+        android:background="@color/design_default_color_primary"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="120dp"
+        android:visibility="gone" />
+</FrameLayout>

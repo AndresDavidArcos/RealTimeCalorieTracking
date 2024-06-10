@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">RealTimeCalorieTracking</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login">Login</string>
+    <string name="registrarse">Registrarse</string>
+    <string name="tituloToolbar">WhatImEating</string>
+    <string name="nombre">Nombre completo</string>
+    <string name="genero">Femenino o Masculino</string>
+    <string name="edad">Edad</string>
+    <string name="peso">Peso en kilos</string>
+    <string name="altura">Altura en metros</string>
+    <string name="actividad">Sedentario, Actividad ligera, Actividad moderada, Muy activo o execesivamente activo </string>
+    <string name="guardar">Guardar</string>
+    <string-array name="genero_array">
+        <item>Femenino</item>
+        <item>Masculino</item>
+    </string-array>
+    <string-array name="actividad_array">
+        <item>Sedentario</item>
+        <item>Actividad ligera</item>
+        <item>Actividad moderada</item>
+        <item>Muy activo</item>
+        <item>Execesivamente activo</item>
+    </string-array>
+
 </resources>

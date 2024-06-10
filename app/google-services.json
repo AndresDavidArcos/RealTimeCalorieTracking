@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "585787964279",
+    "project_id": "whatimeating-7e517",
+    "storage_bucket": "whatimeating-7e517.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:585787964279:android:b091d5592e3f9dc9667f72",
+        "android_client_info": {
+          "package_name": "com.app.realtimecalorietracking"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBa7zjqJBQPSndwFwMCUjM6SvqcB9KLaoM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

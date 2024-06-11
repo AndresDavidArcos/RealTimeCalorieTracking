@@ -52,7 +52,6 @@ import retrofit2.Callback as RetrofitCallback
 import retrofit2.Response as RetrofitResponse
 import android.content.Context
 import androidx.fragment.app.viewModels
-import com.app.realtimecalorietracking.adapter.CaloriesItem
 import com.app.realtimecalorietracking.databinding.FragmentCaloriesBinding
 import com.app.realtimecalorietracking.view.dialog.CalorieAlertDialog
 import com.app.realtimecalorietracking.viewmodel.LoginViewModel

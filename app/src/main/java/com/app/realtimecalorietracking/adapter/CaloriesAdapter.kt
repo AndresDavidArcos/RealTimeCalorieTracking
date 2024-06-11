@@ -4,10 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.realtimecalorietracking.databinding.CardviewCaloriesBinding
+import com.app.realtimecalorietracking.model.Food
 
-data class CaloriesItem(val nombrePlato: String, val calorias: String, val fecha: String)
-
-class CaloriesAdapter(private val calorieItems: List<CaloriesItem>) :
+class CaloriesAdapter(private val calorieItems: List<Food>) :
     RecyclerView.Adapter<CaloriesAdapter.CaloriesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CaloriesViewHolder {
@@ -25,10 +24,10 @@ class CaloriesAdapter(private val calorieItems: List<CaloriesItem>) :
     }
 
     class CaloriesViewHolder(private val binding: CardviewCaloriesBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: CaloriesItem) {
-            binding.tvNombrePlato.text = item.nombrePlato
-            binding.tvCalorias.text = item.calorias
-            binding.tvFecha.text = item.fecha
+        fun bind(item: Food) {
+            binding.tvNombrePlato.text = item.name
+            binding.tvCalorias.text = item.calories.toString()
+            binding.tvFecha.text = item.date.toString()
         }
     }
 }

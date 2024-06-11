@@ -16,8 +16,8 @@ import com.app.realtimecalorietracking.databinding.FragmentCaloriesBinding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.realtimecalorietracking.MainActivity
 import com.app.realtimecalorietracking.R
-import com.app.realtimecalorietracking.adapter.CaloriesItem
 import com.app.realtimecalorietracking.adapter.CaloriesAdapter
+import com.app.realtimecalorietracking.model.Food
 import com.app.realtimecalorietracking.view.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,7 +31,7 @@ class calories : Fragment() {
 
     private lateinit var binding: FragmentCaloriesBinding
     private lateinit var adapter: CaloriesAdapter
-    private lateinit var calorieItemList: MutableList<CaloriesItem>
+    private lateinit var calorieItemList: MutableList<Food>
     private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreateView(

@@ -24,6 +24,7 @@ import com.app.realtimecalorietracking.BuildConfig
 import com.app.realtimecalorietracking.R
 import com.app.realtimecalorietracking.databinding.FragmentEvaluateFoodBinding
 import com.app.realtimecalorietracking.model.Food
+import com.app.realtimecalorietracking.model.User
 import com.microsoft.azure.storage.CloudStorageAccount
 import com.microsoft.azure.storage.blob.CloudBlobClient
 import com.microsoft.azure.storage.blob.CloudBlobContainer
@@ -68,7 +69,7 @@ class evaluateFood : Fragment() {
         private const val TAG = "MAIN_TAG"
         private const val APP_ID = "d672cbed"
         private const val APP_KEY = "5bbd80e51d5d55f97365f0d16e7d1649"
-        private const val CALORIE_LIMIT = 2000 // TODO calcular limite recomendado con datos de usuario
+        private const val CALORIE_LIMIT = 2000 // calculateDailyCalories() TODO perfeccionar función de calorias personalizadas
     }
 
     private lateinit var mCaptureBtn: Button
@@ -114,6 +115,22 @@ class evaluateFood : Fragment() {
         return view
     }
 
+    private fun calculateDailyCalories(user: User): Double {
+        val tmb = if (user.gender.lowercase() == "male") {
+            88.362 + (13.397 * user.weight) + (4.799 * user.height) - (5.677 * user.age)
+        } else {
+            447.593 + (9.247 * user.weight) + (3.098 * user.height) - (4.330 * user.age)
+        }
+        val activityMultiplier = when (user.activity.lowercase()) {
+            "sedentary" -> 1.2
+            "light" -> 1.375
+            "moderate" -> 1.55
+            "high" -> 1.725
+            "very high" -> 1.9
+            else -> 1.2
+        }
+        return tmb * activityMultiplier
+    }
 
     private val requestCameraPermissions =
         registerForActivityResult<Array<String>, Map<String, Boolean>>(

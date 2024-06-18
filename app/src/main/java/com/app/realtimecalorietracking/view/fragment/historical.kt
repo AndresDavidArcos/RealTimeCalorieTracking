@@ -1,5 +1,6 @@
 package com.app.realtimecalorietracking.view.fragment
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,7 +15,6 @@ import com.app.realtimecalorietracking.adapter.HistoricalAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Date
 
 @AndroidEntryPoint
 class historical : Fragment() {
@@ -89,6 +89,7 @@ class historical : Fragment() {
             val closestGoal = goals.minByOrNull { kotlin.math.abs(it.date.time - date.time) }
             dailyRecords.add(DailyRecord(date, foodsList, closestGoal))
         }
+        dailyRecords.sortByDescending { it.date }
 
         return dailyRecords
     }
@@ -96,7 +97,7 @@ class historical : Fragment() {
     private fun showFoodDetails(record: DailyRecord) {
         val foodDetails = record.foods.joinToString("\n") { "${it.name} - ${it.calories} kcal" }
 
-        MaterialAlertDialogBuilder(requireContext())
+        AlertDialog.Builder(requireContext())
             .setTitle("Details of record in ${record.date}")
             .setMessage(foodDetails)
             .setPositiveButton("OK", null)
